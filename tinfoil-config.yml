@@ -1,0 +1,49 @@
+shim-version: v0.3.12@sha256:b81f2295ae6750d61e94f810ce24077360001b6ec795d13643f3170df29e304d
+cvm-version: 0.6.7
+cpus: 16
+memory: 65536
+
+containers:
+  - name: "ml-embeddings"
+    image: "us-central1-docker.pkg.dev/workshop-labs-pbc/pollux-docker/ml-embeddings@sha256:8e56dccaf0fa9c0bb85123779cafddd13eefe0ed6d77116a3ba3351bc497196c"
+    runtime: nvidia
+    gpus: all
+    ipc: host
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse
+    security_opt:
+      - apparmor=unconfined
+    volumes:
+      - /mnt/ramdisk/gcloud_key.json:/key.json:ro
+    env:
+      - GOOGLE_APPLICATION_CREDENTIALS: "/key.json"
+      - GCS_BUCKET: "pollux-enc-prod"
+      - POLLUX_LN_GCS_BUCKET: "gs://pollux-enc-prod"
+      - KEY_MODE: "real_keys"
+    secrets:
+      - DATABASE_URL
+      - GOOGLE_CLIENT_ID
+      - GOOGLE_CLIENT_SECRET
+      - TINFOIL_API_KEY
+      - HF_TOKEN
+      - INTERNAL_SERVICE_SECRET
+    command:
+      - "--prod"
+
+shim:
+  listen-port: 443
+  upstream-port: 8000
+  publish-attestation: true
+  tls-challenge: dns
+  paths:
+    - /ping
+    - /set_dek
+    - /v1/search
+    - /v1/file/{file_id}
+    - /v1/db/users
+    - /v1/db/files
+    - /v1/metrics
+    - /v1/stats
+    - /v1/user/*
