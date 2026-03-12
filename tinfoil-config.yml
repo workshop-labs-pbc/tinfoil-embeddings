@@ -5,7 +5,7 @@ memory: 65536
 
 containers:
   - name: "ml-embeddings"
-    image: "us-central1-docker.pkg.dev/workshop-labs-pbc/pollux-docker/ml-embeddings@sha256:8e56dccaf0fa9c0bb85123779cafddd13eefe0ed6d77116a3ba3351bc497196c"
+    image: "us-central1-docker.pkg.dev/workshop-labs-pbc/pollux-docker/ml-embeddings@sha256:e34006d6b5cbd24b3e4558b6c04961190b6b89a07ea23bfcd326703f3bd3bd13"
     runtime: nvidia
     gpus: all
     ipc: host
